@@ -1,4 +1,24 @@
 {
+  "community.zhihuOpen": {
+    "message": "Visit the Zhihu column (opens in a new window)",
+    "description": "前往知乎专栏（新窗口打开）"
+  },
+  "community.zhihuBadge": {
+    "message": "Technical insights",
+    "description": "技术分享"
+  },
+  "community.zhihuTitle": {
+    "message": "Zhihu column",
+    "description": "知乎专栏"
+  },
+  "community.zhihuDescription": {
+    "message": "Explore in-depth technical articles from the community and keep up with its latest technical developments.",
+    "description": "探索社区硬核技术分享内容，了解社区技术发展近况。"
+  },
+  "community.zhihuVisit": {
+    "message": "Visit the Zhihu column",
+    "description": "前往知乎专栏"
+  },
   "community.officialAccountBadge": {
     "message": "Official updates",
     "description": "权威发布"
@@ -2024,8 +2044,8 @@
     "description": "模型广场截图，可横向滚动查看"
   },
   "home.deployment.screenshotAlt": {
-    "message": "ModelSphere Console model catalog: sorted by improvement, browse models and deployment variants, with DeepSeek cards showing tuning gains of +50.7% and +58%.",
-    "description": "ModelSphere Console 模型广场：按提升排序，浏览模型和部署变体，DeepSeek 模型卡片展示调优 +50.7%、+58% 的性能提升标签。"
+    "message": "ModelSphere Console model library: sorted by improvement, browse models, deployment variants, and tuning gains.",
+    "description": "ModelSphere Console 模型库：按提升排序，浏览模型、部署变体与调优收益标签。"
   },
   "site.0fb4c5c150d7": {
     "message": "Model and architecture",
