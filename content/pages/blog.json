@@ -54,6 +54,10 @@
     {
       "id": "markdown",
       "label": "Markdown"
+    },
+    {
+      "id": "ascend",
+      "label": "昇腾"
     }
   ],
   "channels": [],
