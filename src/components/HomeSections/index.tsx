@@ -876,7 +876,7 @@ export function GetStarted() {
               </svg>
             </a>
             <a
-              href="#home-community"
+              href={siteHref('/community#community-wechat-group')}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/30 text-white transition-all font-semibold text-base shadow-sm hover:shadow-md"
             >
               <svg

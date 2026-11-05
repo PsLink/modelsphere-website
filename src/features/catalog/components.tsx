@@ -1,5 +1,6 @@
 import { translateCopy } from '@site/src/lib/translate-copy';
 import { translate } from '@docusaurus/Translate';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import React, { useId, useState } from 'react';
 import Link from '@docusaurus/Link';
 import {
@@ -472,13 +473,20 @@ export function SourceLinks({
   r: Recipe;
   includeReport?: boolean;
 }) {
+  const {
+    i18n: { currentLocale },
+  } = useDocusaurusContext();
   return (
     <div className={styles.actions}>
       <a href={sourceUrl(r.variant)} target="_blank" rel="noreferrer">
         {translate({ id: 'site.61e67a99c6ff', message: '查看配方文件 ↗' })}
       </a>
       {includeReport && reportUrl(r) && (
-        <a href={reportUrl(r)!} target="_blank" rel="noreferrer">
+        <a
+          href={reportUrl(r, undefined, currentLocale === 'en' ? 'en' : 'zh')!}
+          target="_blank"
+          rel="noreferrer"
+        >
           {translate({ id: 'site.7c91d0100fd4', message: '查看性能报告 ↗' })}
         </a>
       )}

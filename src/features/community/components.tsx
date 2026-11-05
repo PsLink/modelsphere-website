@@ -771,7 +771,10 @@ export function CommunityContent() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all group">
+              <div
+                id="community-wechat-group"
+                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-sky-300 hover:shadow-md transition-all group"
+              >
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                     <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600">

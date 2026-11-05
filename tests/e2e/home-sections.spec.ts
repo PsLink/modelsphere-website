@@ -340,7 +340,17 @@ test('restored modules contain narrow layouts and preserve working section links
   expect((await page.request.get(destination!)).status()).toBe(200);
   await expect(
     page.getByRole('link', { name: '加入开发者交流群', exact: true }),
-  ).toHaveAttribute('href', '#home-community');
+  ).toHaveAttribute('href', '/community#community-wechat-group');
+  await page
+    .getByRole('link', { name: '加入开发者交流群', exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/community#community-wechat-group$/);
+  await expect(
+    page.locator('#community-wechat-group').getByRole('heading', {
+      name: '微信技术交流群',
+      exact: true,
+    }),
+  ).toBeInViewport();
 });
 
 for (const [id, source] of Object.entries(qosSource)) {

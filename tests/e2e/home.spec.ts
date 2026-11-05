@@ -871,7 +871,21 @@ test('returning from the docs with browser history does not replay the hero entr
     .filter({ hasText: '快速开始 Quickstart' })
     .first()
     .click();
-  await expect(page).toHaveURL(/\/docs\/?$/);
+  await expect(page).toHaveURL(
+    process.env.TEST_DOCS_MODE === 'none'
+      ? /\/docs\/?$/
+      : /\/docs\/quickstart$/,
+  );
+  if (process.env.TEST_DOCS_MODE !== 'none')
+    await expect(
+      page.getByRole('heading', {
+        name:
+          process.env.TEST_DOCS_MODE === 'content'
+            ? '快速开始'
+            : '快速开始（示例）',
+        exact: true,
+      }),
+    ).toBeVisible();
   await expect(page.locator(home)).toHaveCount(0);
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);

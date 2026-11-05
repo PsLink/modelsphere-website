@@ -2130,7 +2130,7 @@ html[data-theme='light']
   outline: 2px solid var(--color-focus-ring);
   outline-offset: 3px;
 }
-[data-community-design] :is(section, h1, h2) {
+[data-community-design] :is(section, h1, h2, #community-wechat-group) {
   scroll-margin-top: 80px;
 }
 [data-community-design] .community-mobile-menu {

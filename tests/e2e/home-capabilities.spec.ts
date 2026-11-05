@@ -17,6 +17,20 @@ test('four capability cards restore the selected Stitch copy, icons, colors and 
     '统一支持多种异构 AI 芯片',
     '性能优化持续演进',
   ]);
+  await expect(cards.nth(0).locator('h3 a')).toHaveAttribute(
+    'href',
+    '#benchmarks',
+  );
+  await expect(cards.nth(1).locator('h3 a')).toHaveAttribute(
+    'href',
+    process.env.TEST_DOCS_MODE === 'none' ? '/docs' : '/docs/quickstart',
+  );
+  await expect(cards.nth(2).getByRole('link')).toHaveCount(0);
+  await expect(cards.nth(3).locator('h3 a')).toHaveAttribute(
+    'href',
+    '#autotune-evolution',
+  );
+  await expect(cards.locator('h3 a[target="_blank"]')).toHaveCount(0);
   for (const text of [
     '自动弹性伸缩 (Auto-Scaling)',
     'ENABLED: 4-32 Pods',

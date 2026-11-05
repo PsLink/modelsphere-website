@@ -493,7 +493,7 @@ export default function CatalogPage() {
                   <summary>
                     {translate({
                       id: 'site.6724ef3be3e4',
-                      message: '视图与更多筛选',
+                      message: '更多筛选',
                     })}
                   </summary>
                   <div>

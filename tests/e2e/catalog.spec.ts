@@ -93,7 +93,7 @@ for (const width of [390, 1440])
     await expect(statistics.locator('strong').nth(1)).toHaveText(
       String(72 - retiredModel.variants.length - 1),
     );
-    await page.getByText('视图与更多筛选', { exact: true }).click();
+    await page.getByText('更多筛选', { exact: true }).click();
     await expect(
       page.getByRole('checkbox', { name: '隐藏已弃用记录' }),
     ).toHaveCount(0);
@@ -598,7 +598,7 @@ for (const width of [390, 1440])
       await expect(page).toHaveURL(/\/models$/);
       await expect(trigger).toHaveText('全部模型家族');
       await expect(trigger).toBeFocused();
-      await page.getByText('视图与更多筛选', { exact: true }).click();
+      await page.getByText('更多筛选', { exact: true }).click();
       await choose(page, '配方角色', '基线');
       await expect(page).toHaveURL(/role=baseline/);
       await choose(page, '部署拓扑', '单节点');
@@ -857,7 +857,9 @@ for (const layout of ['cards', 'table'])
     await expect(
       page.getByRole('tab', { name: '部署配置', selected: true }),
     ).toBeVisible();
-    await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+    await expect(
+      page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+    ).toBeVisible();
     await expect(page.getByRole('tab')).toHaveCount(2);
     await expect(page.getByRole('tab', { name: '版本历史' })).toHaveCount(0);
     await page.getByRole('tab', { name: '性能对照' }).click();
@@ -903,7 +905,9 @@ test('model recipe entries and performance gains lead into the same recipe detai
   await expect(page).toHaveURL(/\/models\/recipe\?.*tab=performance/);
   await expect(reportBody(page)).toContainText('119.9%');
   await page.getByRole('tab', { name: '部署配置' }).click();
-  await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+  await expect(
+    page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+  ).toBeVisible();
   await expect(page.locator('#benchmark')).toBeHidden();
   await page.getByRole('tab', { name: '性能对照' }).click();
   await expect(reportBody(page)).toContainText('119.9%');
@@ -967,7 +971,9 @@ for (const width of [320, 1440])
     await page.goto(
       `/models/recipe?modelId=mimo-v2.5&recipeId=${variant.id}&dataVersion=${baseline.commit}`,
     );
-    await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+    await expect(
+      page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+    ).toBeVisible();
     await expect(page.locator('main')).toHaveAttribute(
       'data-catalog-status',
       'live',
@@ -1016,7 +1022,9 @@ for (const width of [320, 1440])
     await page.keyboard.press('ArrowRight');
     await expect(deployment).toBeFocused();
     await page.keyboard.press('Enter');
-    await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+    await expect(
+      page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+    ).toBeVisible();
     const afterReload = { ...counts };
     await performance.click();
     await expect(reportBody(page)).toContainText('119.9%');
@@ -1170,7 +1178,9 @@ test('fullscreen failure keeps the original report and standalone link available
   );
   await expect(reportBody(page)).toContainText('119.9%');
   await page.getByRole('button', { name: '全屏观看', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('暂时无法全屏观看');
+  await expect(
+    page.getByRole('status').filter({ hasText: '暂时无法全屏观看' }),
+  ).toContainText('暂时无法全屏观看，请使用“查看完整报告”。');
   await expect(
     page.getByRole('link', { name: '查看完整报告 ↗' }),
   ).toBeVisible();
@@ -1255,7 +1265,9 @@ test('history opens the exact configuration and keeps reports bound to their mea
   await expect(
     page.getByRole('tab', { name: '部署配置', selected: true }),
   ).toBeVisible();
-  await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+  await expect(
+    page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+  ).toBeVisible();
   await expect(page.getByRole('combobox', { name: '配方版本' })).toHaveText(
     `${oldVersion} · 日期未提供`,
   );
@@ -1328,7 +1340,9 @@ test('an unknown tab falls back to deployment without discarding the configurati
   await expect(
     page.getByRole('tab', { name: '部署配置', selected: true }),
   ).toBeVisible();
-  await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+  await expect(
+    page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+  ).toBeVisible();
   await expect(page.getByRole('combobox', { name: '配方版本' })).toHaveText(
     `${variant.version} · ${variant.releaseDate ?? '日期未提供'}`,
   );
@@ -1403,8 +1417,21 @@ for (const width of [320, 390, 768, 1440])
         ).toBeVisible();
         if (tab === 'deployment') {
           await expect(
-            page.getByText('原始 YAML · SHA-256 校验通过'),
+            page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
           ).toBeVisible();
+          const code = page
+            .getByRole('tabpanel', { name: '部署配置' })
+            .locator('pre');
+          const copy = page.getByRole('button', {
+            name: '复制完整配方',
+            exact: true,
+          });
+          const codeBox = (await code.boundingBox())!;
+          const copyBox = (await copy.boundingBox())!;
+          expect(copyBox.width).toBe(30);
+          expect(copyBox.height).toBe(30);
+          expect(copyBox.y - codeBox.y).toBe(8);
+          expect(codeBox.x + codeBox.width - copyBox.x - copyBox.width).toBe(8);
           await page.getByRole('combobox', { name: '配方版本' }).click();
           const list = page.getByRole('listbox');
           await expect(list).toBeVisible();
@@ -1436,7 +1463,10 @@ test('recipe details validate complete YAML without duplicate sections and repor
   await page.goto(
     `/models/recipe?modelId=mimo-v2.5&recipeId=${variant.id}&dataVersion=${baseline.commit}`,
   );
-  await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toBeVisible();
+  await expect(
+    page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+  ).toBeVisible();
+  await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toHaveCount(0);
   await page.getByRole('button', { name: '复制完整配方', exact: true }).click();
   await expect(page.getByText('已复制', { exact: true })).toBeVisible();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(yaml);
@@ -1584,9 +1614,10 @@ test('static HTML contains the entire baseline and parameter detail routes work 
   expect(response?.status()).toBe(200);
   await expect(page.locator('[data-recipe-id]')).toHaveCount(72);
   await page.goto(baseURL + '/models/recipe?modelId=mimo-v2.5');
-  await expect(
-    page.getByText('实时模型和配方详情需要 JavaScript。'),
-  ).toBeVisible();
+  await expect(page.locator('main noscript p')).toBeVisible();
+  await expect(page.locator('main noscript p')).toContainText(
+    '实时模型和配方详情需要 JavaScript。',
+  );
   const reportResponse = await page.goto(
     baseURL + '/models/report?modelId=mimo-v2.5&recipeId=' + variant.id,
   );
@@ -1681,7 +1712,9 @@ test('inconsistent configuration bytes and unreadable reports do not become veri
   );
   await page.goto(`/models/recipe?modelId=mimo-v2.5&recipeId=${variant.id}`);
   await expect(page.getByRole('alert')).toContainText('校验值与目录不一致');
-  await expect(page.getByText('原始 YAML · SHA-256 校验通过')).toHaveCount(0);
+  await expect(
+    page.getByRole('tabpanel', { name: '部署配置' }).locator('pre'),
+  ).toHaveCount(0);
   await expect(page.locator('#benchmark')).toHaveCount(0);
   await page.goto(`/models/report?modelId=mimo-v2.5&recipeId=${variant.id}`);
   await expect(page.locator('#benchmark')).toContainText('报告数据加载失败');

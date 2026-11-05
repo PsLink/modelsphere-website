@@ -248,7 +248,8 @@ function DetailContent({ kind }: { kind: 'model' | 'recipe' }) {
             </nav>
             <SourceState {...state} />
           </div>
-          {!browser ? (
+          <noscript>
+            <style>{`.${styles.detailSkeleton} { display: none; }`}</style>
             <section>
               <h1>
                 {translate({
@@ -268,6 +269,47 @@ function DetailContent({ kind }: { kind: 'model' | 'recipe' }) {
                   })}
                 </a>
               </p>
+            </section>
+          </noscript>
+          {!browser ||
+          (!invalid &&
+            (state.status === 'baseline' || state.status === 'loading')) ? (
+            <section
+              className={styles.detailSkeleton}
+              role="status"
+              aria-busy="true"
+            >
+              <span className={styles.skeletonStatus}>
+                {translate({
+                  id: 'catalog.loadingDetails',
+                  message: '正在加载详情…',
+                })}
+              </span>
+              <div aria-hidden="true">
+                <div className={styles.skeletonHeading}>
+                  <span
+                    className={`${styles.skeletonBlock} ${styles.skeletonTitle}`}
+                  />
+                  <span
+                    className={`${styles.skeletonBlock} ${styles.skeletonSubtitle}`}
+                  />
+                </div>
+                <div className={styles.skeletonFacts}>
+                  {[0, 1, 2, 3].map((item) => (
+                    <span key={item} className={styles.skeletonBlock} />
+                  ))}
+                </div>
+                <div className={styles.skeletonPanel}>
+                  <span
+                    className={`${styles.skeletonBlock} ${styles.skeletonTitle}`}
+                  />
+                  <span className={styles.skeletonBlock} />
+                  <span className={styles.skeletonBlock} />
+                  <span
+                    className={`${styles.skeletonBlock} ${styles.skeletonSubtitle}`}
+                  />
+                </div>
+              </div>
             </section>
           ) : invalid ? (
             <div className={styles.empty}>
@@ -521,22 +563,12 @@ function DetailContent({ kind }: { kind: 'model' | 'recipe' }) {
                             })}
                           </p>
                         ) : (
-                          <>
-                            <div className={styles.detailTop}>
-                              <p>
-                                {translate({
-                                  id: 'site.d148e4e0a931',
-                                  message: '原始 YAML · SHA-256 校验通过',
-                                })}
-                              </p>
-                              <CopyButton
-                                getText={() => Promise.resolve(text)}
-                              />
-                            </div>
+                          <div className={styles.codeBlock}>
+                            <CopyButton getText={() => Promise.resolve(text)} />
                             <pre className={styles.code}>
                               <code>{text}</code>
                             </pre>
-                          </>
+                          </div>
                         )}
                       </section>
                       <section

@@ -1,4 +1,12 @@
 {
+  "catalog.loadingDetails": {
+    "message": "Loading details…",
+    "description": "正在加载详情…"
+  },
+  "catalog.reportLanguageFallback": {
+    "message": "This report is unavailable in the selected language. Showing the original report.",
+    "description": "该报告暂无当前语言版本，已显示原始报告。"
+  },
   "community.zhihuOpen": {
     "message": "Visit the Zhihu column (opens in a new window)",
     "description": "前往知乎专栏（新窗口打开）"
@@ -1684,8 +1692,8 @@
     "description": "重置筛选"
   },
   "site.6724ef3be3e4": {
-    "message": "View and more filters",
-    "description": "视图与更多筛选"
+    "message": "More filters",
+    "description": "更多筛选"
   },
   "site.ace412e9d655": {
     "message": "Recipe role",

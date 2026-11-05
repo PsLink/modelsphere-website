@@ -35,6 +35,12 @@ test('home restores the selected Stitch screen copy, gradient and desktop propor
   await expect(
     page.getByRole('link', { name: '快速开始 Quickstart', exact: true }),
   ).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: '快速开始 Quickstart', exact: true }),
+  ).toHaveAttribute(
+    'href',
+    process.env.TEST_DOCS_MODE === 'none' ? '/docs' : '/docs/quickstart',
+  );
   const catalogLink = page.getByRole('link', {
     name: '模型调优库 (Model Catalog)',
     exact: true,

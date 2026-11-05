@@ -1,4 +1,5 @@
 import { translate } from '@docusaurus/Translate';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useSitePath } from '@site/src/lib/use-site-path';
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
@@ -16,10 +17,6 @@ import { useHomeMotion } from '@site/src/components/HomeMotion';
 import styles from './index.module.css';
 
 const sources = {
-  deployment:
-    'https://github.com/modelsphere/modelsphere/blob/d5c892d2c1747b9411b423dae5c776d0c84a8003/README.zh-CN.md#快速开始',
-  hardware:
-    'https://github.com/modelsphere/modelsphere/blob/d5c892d2c1747b9411b423dae5c776d0c84a8003/README.zh-CN.md#核心特性',
   catalog: '/models',
   continuation:
     'https://github.com/modelsphere/modelsphere/blob/d5c892d2c1747b9411b423dae5c776d0c84a8003/docs/deploy-a-model.md#continuation-gateway-optional',
@@ -28,8 +25,6 @@ const sources = {
   qos: 'https://github.com/modelsphere/modelsphere/blob/d5c892d2c1747b9411b423dae5c776d0c84a8003/docs/openresty.md',
   scaling:
     'https://github.com/modelsphere/modelsphere/blob/d5c892d2c1747b9411b423dae5c776d0c84a8003/docs/autoscaling.md',
-  autotune:
-    'https://github.com/modelsphere/llm-autotune/blob/c627ccfc1aeb59590f3732978eb771110488f558/docs/workflow.md',
   github: 'https://github.com/modelsphere/modelsphere',
 };
 
@@ -142,8 +137,7 @@ const capabilities: {
   tag: string;
   tone: string;
   description: string;
-  href: string;
-  linkLabel: string;
+  href?: string;
 }[] = [
   {
     id: 'day-one',
@@ -159,11 +153,7 @@ const capabilities: {
       message:
         '紧跟快速演进的模型生态，通过我们的推理性能优化社区，第一时间完成新模型适配和调优，让最新大模型能够快速导入、配置并部署到生产环境。',
     }),
-    href: sources.catalog,
-    linkLabel: translate({
-      id: 'site.5139a1fd0121',
-      message: '浏览模型与部署配方',
-    }),
+    href: '#benchmarks',
   },
   {
     id: 'architecture',
@@ -179,8 +169,7 @@ const capabilities: {
       message:
         '几分钟内即可搭建面向生产环境的AI推理平台，开箱即具备模型服务、调度、弹性伸缩、可观测性和运维等核心能力。提供直观的统一WebUI面板，无需复杂的底层调优即可轻松接管集群。',
     }),
-    href: sources.deployment,
-    linkLabel: translate({ id: 'site.36dcd53c4e0a', message: '了解部署方式' }),
+    href: '/docs/quickstart',
   },
   {
     id: 'hardware',
@@ -196,11 +185,6 @@ const capabilities: {
       message:
         '通过统一的平台无缝运行在多种异构AI硬件之上。原生兼容通用GPU，并深度基于EngineX适配华为昇腾、天数智芯、摩尔线程、海光等加速芯片，实现混合节点的统一纳管。',
     }),
-    href: sources.hardware,
-    linkLabel: translate({
-      id: 'site.a440b9d6fe4d',
-      message: '查看硬件与引擎说明',
-    }),
   },
   {
     id: 'evolution',
@@ -213,11 +197,7 @@ const capabilities: {
       message:
         '持续集成最新的推理优化能力，通过内置 Tuning Agent 根据模型、硬件和真实业务负载自动调优，在延迟、吞吐和资源效率之间持续获得更优表现。',
     }),
-    href: sources.autotune,
-    linkLabel: translate({
-      id: 'site.a0d8f6e52488',
-      message: '了解 Tuning Agent 工作流',
-    }),
+    href: '#autotune-evolution',
   },
 ];
 function CapabilityDetail({ id }: { id: string }) {
@@ -386,6 +366,10 @@ function CapabilityDescription({
 }
 export default function Home() {
   const { siteHref } = useSitePath();
+  const { siteConfig } = useDocusaurusContext();
+  const quickstartHref = String(
+    siteConfig.customFields?.docsQuickstartHref ?? '/docs',
+  );
   const root = useRef<HTMLElement>(null);
   useHomeMotion(root);
   return (
@@ -490,7 +474,7 @@ export default function Home() {
             <div className={styles.heroActions}>
               <Link
                 className={`${styles.action} ${styles.primaryAction}`}
-                to="/docs"
+                to={quickstartHref}
               >
                 {translate({
                   id: 'site.f9fa4959f263',
@@ -565,31 +549,20 @@ export default function Home() {
                         <CapabilityIcon name={card.icon} />
                       </span>
                       <h3>
-                        <a
-                          className={styles.cardTitleLink}
-                          href={siteHref(card.href)}
-                          target={
-                            card.href.startsWith('/') ? undefined : '_blank'
-                          }
-                          rel={
-                            card.href.startsWith('/')
-                              ? undefined
-                              : 'noopener noreferrer'
-                          }
-                          aria-label={
-                            card.href.startsWith('/')
-                              ? card.linkLabel
-                              : translate(
-                                  {
-                                    id: 'site.a1f30fa8216e',
-                                    message: '{v0}（新窗口打开）',
-                                  },
-                                  { v0: card.linkLabel },
-                                )
-                          }
-                        >
-                          {card.title}
-                        </a>
+                        {card.href ? (
+                          <a
+                            className={styles.cardTitleLink}
+                            href={siteHref(
+                              card.id === 'architecture'
+                                ? quickstartHref
+                                : card.href,
+                            )}
+                          >
+                            {card.title}
+                          </a>
+                        ) : (
+                          card.title
+                        )}
                       </h3>
                     </div>
                     <span className={styles.badge}>{card.tag}</span>
