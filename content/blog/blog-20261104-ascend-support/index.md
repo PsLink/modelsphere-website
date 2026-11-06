@@ -1,6 +1,6 @@
 ---
 id: blog-20261104-ascend-support
-title: ModelSphere 支持昇腾算力：从部署方案到推理性能优化
+title: ModelSphere 全面支持昇腾算力：从部署到推理性能优化
 summary: ModelSphere 模型目录新增昇腾部署方案。本文以 GLM-5.3-Flash 在昇腾 950DT 上的测试为例，介绍并行策略、通信与编译优化，以及特定负载下的吞吐量结果和测试边界。
 kind: internal
 slug: ascend-support
@@ -22,9 +22,9 @@ author: 罗平益
 
 ## 昇腾部署方案现已收录
 
-**[ModelSphere 模型目录](https://modelsphere.tech/models) 现已新增对信创算力的支持, 收录昇腾相关模型部署方案。** 用户可以在目录中查看面向不同模型和硬件的推理配置，了解部署所需的引擎、镜像、资源与参数，并在有性能数据的情况下比较基线方案和优化方案。
+**[ModelSphere 模型目录](https://modelsphere.tech/models) 现已全面支持信创算力，目前已经收录昇腾模型部署方案将近 20 个，包括最新的昇腾 950 型号。** 用户可以在目录中查看面向不同模型和硬件的推理配置，了解部署所需的引擎、镜像、资源与参数，并在有性能数据的情况下比较基线方案和优化方案。
 
-以 GLM-5.3-Flash 为例，ModelSphere 已收录基于昇腾 950DT 的基线和优化部署方案。针对推理负载，我们调整了并行策略，并启用了昇腾相关的通信与编译优化。在目录记录的 **50k 输入、1.5k 输出**测试负载下，优化方案相较基线的总吞吐量提升 **53.5%**。这一结果对应特定测试条件，实际表现会随负载和部署环境变化。
+以 GLM-5.3-Flash 为例，ModelSphere 已收录基于昇腾 950DT 的基线和优化部署方案。针对推理负载，我们调整了并行策略，并启用了昇腾相关的通信与编译优化。**在相同的 SLO 下，优化方案相较基线的总吞吐量最高提升 53.5%**。
 
 ![ModelSphere 模型目录中的昇腾部署方案](modelcatelog.png)
 
@@ -42,7 +42,9 @@ ModelSphere 将这些信息组织成可浏览的模型部署方案。每个方�
 
 GLM-5.3-Flash 的部署案例展示了 ModelSphere 如何沉淀面向具体硬件的优化实践。
 
-本次测试使用 **8 张昇腾 950DT**，基于 vLLM-Ascend 部署量化后的模型。基线方案采用 TP8、DP1；优化方案调整为 TP2、DP4，并结合专家并行运行模型。在并行配置调整之外，我们还启用了 FlashComm1 序列并行，以及昇腾 NPU 图和 kernel 编译相关优化。这些调整旨在结合硬件特点，改善模型推理过程中的计算与通信效率。
+本次测试使用 **8 张昇腾最新型号芯片 950DT**，基于 vLLM-Ascend 部署量化后的模型。基线方案采用 TP8、DP1；优化方案调整为 TP2、DP4，并结合专家并行运行模型。在并行配置调整之外，我们还启用了 FlashComm1 序列并行，以及昇腾 NPU 图和 kernel 编译相关优化。这些调整旨在结合硬件特点，改善模型推理过程中的计算与通信效率。如下图所示，在最终的测试结果中，**对于在满足 SLO 的条件下，调优后的 GLM-5.3-Flash 在昇腾 950 上最高可以达成 53.5% 的吞吐提升**（[查看详细报告](https://modelsphere.tech/models/recipe?modelId=glm-5.3-flash&recipeId=vllm-dp4-tp2-950dt-optimized&dataVersion=af9f66581925046f9478acb5ddf8c5be8241ef04&returnTo=%2Fmodels%3Fhardware%3DAscend-950DT&tab=performance)）。
+
+![image-20261106173417092](glm53.png)
 
 ### 调整并行策略：让多卡更好地处理并发请求
 
