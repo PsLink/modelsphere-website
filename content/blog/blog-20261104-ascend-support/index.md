@@ -4,9 +4,9 @@ title: ModelSphere 支持昇腾算力：从部署方案到推理性能优化
 summary: ModelSphere 模型目录新增昇腾部署方案。本文以 GLM-5.3-Flash 在昇腾 950DT 上的测试为例，介绍并行策略、通信与编译优化，以及特定负载下的吞吐量结果和测试边界。
 kind: internal
 slug: ascend-support
-publishedAt: 2026-11-04
+publishedAt: 2026-11-06
 draft: true
-updatedAt: 2026-11-04T17:19:00+08:00
+updatedAt: 2026-11-06T17:19:00+08:00
 evidenceIds: []
 categoryId: performance
 tagIds:
